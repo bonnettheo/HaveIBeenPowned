@@ -55,7 +55,10 @@ def checkHaveIBeenPwned(email):
 	if len(newBreach) > 0:
 		fileContent[email]["pwnedTimes"] += len(newBreach)
 		fileContent[email]["pwnedList"].extend(newBreach)
-		mailer.send_mail(newBreach, email)
+		try:
+			mailer.send_mail(newBreach, email)
+		except:
+			print("mail failed")
 	
 	with open(filename, "w") as f:
 		try:
