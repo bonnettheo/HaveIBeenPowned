@@ -1,0 +1,10 @@
+Dear User, 
+
+This is a pwned message.
+Your e-mail account leaked ${TIME} time recently.
+
+Visit ${URL} for more details.
+  
+Have a great weekend! 
+
+Yours Truly
