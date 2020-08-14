@@ -3,6 +3,7 @@ from string import Template
 import getpass 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import json
 
 def read_template(filename):
 
@@ -10,33 +11,27 @@ def read_template(filename):
 		template_file_content = template_file.read()
 	return Template(template_file_content)
 
+def getMail():
+	with open("automation_mail.json", 'r', encoding='utf-8') as json_file:
+		mailAccount = json.load(json_file)
+	return mailAccount["mail"], mailAccount["password"]
+
 def send_mail(breach, address):
+
+	sender, password = getMail()
 	s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
 	s.starttls()
-
-	login = False
-	i=0
-	while i < 5 and not login:
-		i += 1
-		try:
-			p = getpass.getpass()
-			s.login(address, p)
-			login = True
-		except:
-			pass
-	if not login:
-		print("powned but cannot send email")
-		s.quit()
-		quit()
+	
+	s.login(sender, password)
 
 	message_template = read_template('message.txt')
-	msg = MIMEMultipart()       # create a message
+	msg = MIMEMultipart()
 	message = message_template.substitute(TIME=len(breach), URL="https://haveibeenpwned.com/")
 	print(message)
 
-	msg['From']=address
+	msg['From']=sender
 	msg['To']=address
-	msg['Subject']="I have been powned"
+	msg['Subject']="You have been powned"
 
 	msg.attach(MIMEText(message, 'plain'))
 

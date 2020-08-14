@@ -59,6 +59,7 @@ def checkHaveIBeenPwned(email):
 			mailer.send_mail(newBreach, email)
 		except:
 			print("mail failed")
+			traceback.print_exc()
 	
 	with open(filename, "w") as f:
 		try:
